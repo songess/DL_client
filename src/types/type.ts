@@ -33,7 +33,7 @@ export interface Book {
 
 export interface Rent {
   rentId: number;
-  title: number;
+  title: string;
   groupName: GROUPNAME;
   returnAt: Date;
   rentalPeriod: number;
