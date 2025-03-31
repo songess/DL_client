@@ -1,26 +1,26 @@
-type USER = "ADMIN" | "USER";
+type GROUPSTATUS = 'NONE' | 'PENDING' | 'ACCEPTED' | 'REJECTED';
+type GROUPNAME = 'CNU' | 'PARROT' | 'GDGoC' | 'RELEASE';
+type USER = 'ADMIN' | 'USER';
 
-interface UserGroup {
+export interface UserGroup {
   groupId: number;
-  status: string;
+  name: string;
+  status: GROUPSTATUS;
 }
 
 export interface User {
   userId: number;
   name: string;
   studentNumber: number;
-  password: string;
   role: USER;
   phoneNumber: string;
   email?: string;
-  groups: UserGroup[];
 }
 
 export interface Group {
   groupId: number;
   name: string;
 }
-
 
 export interface Book {
   bookId: number;
@@ -33,11 +33,10 @@ export interface Book {
 
 export interface Rent {
   rentId: number;
-  bookId: number;
-  userId: number;
-  groupId: number;
+  title: number;
+  groupName: GROUPNAME;
   returnAt: Date;
   rentalPeriod: number;
-  rentalCount: number;
+  rentalCount: number; // 연장횟수
   createdAt: Date;
 }
