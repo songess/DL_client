@@ -1,4 +1,11 @@
-import { LoginResponse } from '@/types/type';
+import {
+  BookListResponse,
+  BookRegisterRequest,
+  GroupListResponse,
+  GroupUserPENDINGListResponse,
+  LoginResponse,
+  MyLentsResponse,
+} from '@/types/type';
 
 export const fetchLogin = async (
   studentId: string,
@@ -97,6 +104,7 @@ export const updateUserInfo = async ({
     }
   );
 };
+
 export const updatePassword = async (password: string) => {
   await fetchWithAuth(
     `${process.env.NEXT_PUBLIC_BACKEND_DOMAIN}/api/user/pwd`,
@@ -108,4 +116,179 @@ export const updatePassword = async (password: string) => {
       body: JSON.stringify({ password }),
     }
   );
+};
+
+export const fetchGroupList = async (): Promise<GroupListResponse> => {
+  const response = await fetchWithAuth(
+    `${process.env.NEXT_PUBLIC_BACKEND_DOMAIN}/api/groups`,
+    {
+      method: 'GET',
+    }
+  );
+  return response.json();
+};
+
+export const fetchGroupApply = async (
+  groupId: number
+): Promise<GroupListResponse> => {
+  const response = await fetchWithAuth(
+    `${process.env.NEXT_PUBLIC_BACKEND_DOMAIN}/api/group-user/request-join?groupId=${groupId}`,
+    {
+      method: 'POST',
+      credentials: 'include',
+    }
+  );
+  return response.json();
+};
+
+export const fetchCreateGroup = async (
+  groupName: string
+): Promise<GroupListResponse> => {
+  const response = await fetchWithAuth(
+    `${process.env.NEXT_PUBLIC_BACKEND_DOMAIN}/api/groups`,
+    {
+      method: 'POST',
+      body: JSON.stringify({ groupName }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+    }
+  );
+  return response.json();
+};
+
+export const fetchGroupUserListPENDING = async (
+  groupId: string,
+  status: string
+): Promise<GroupUserPENDINGListResponse> => {
+  const response = await fetchWithAuth(
+    `${process.env.NEXT_PUBLIC_BACKEND_DOMAIN}/api/group-user/list-join-requests?groupId=${groupId}&status=${status}`,
+    {
+      method: 'GET',
+      credentials: 'include',
+    }
+  );
+  return response.json();
+};
+
+export const fetchGroupUserApproval = async (
+  userId: number,
+  action: 'APPROVED' | 'REJECTED',
+  groupId: number
+) => {
+  const response = await fetchWithAuth(
+    `${process.env.NEXT_PUBLIC_BACKEND_DOMAIN}/api/group-user/approve-or-reject`,
+    {
+      method: 'PUT',
+      body: JSON.stringify({ userId, status: action, groupId }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+    }
+  );
+  return response.json();
+};
+
+export const fetchBookList = async (): Promise<BookListResponse> => {
+  const response = await fetchWithAuth(
+    `${process.env.NEXT_PUBLIC_BACKEND_DOMAIN}/api/books`,
+    {
+      method: 'GET',
+      credentials: 'include',
+    }
+  );
+  return response.json();
+};
+
+export const fetchGroupAdminPromotion = async (groupId: number) => {
+  const response = await fetchWithAuth(
+    `${process.env.NEXT_PUBLIC_BACKEND_DOMAIN}/api/group-user/set-admin?groupId=${groupId}`,
+    {
+      method: 'POST',
+      // body: JSON.stringify({ userId }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+    }
+  );
+  return response.json();
+};
+
+export const fetchGroupNameChange = async (
+  groupId: number,
+  newName: string
+) => {
+  const response = await fetchWithAuth(
+    `${process.env.NEXT_PUBLIC_BACKEND_DOMAIN}/api/groups/${groupId}`,
+    {
+      method: 'PUT',
+      body: JSON.stringify({ groupName: newName }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+    }
+  );
+  return response.json();
+};
+
+export const fetchGroupDelete = async (groupId: number) => {
+  const response = await fetchWithAuth(
+    `${process.env.NEXT_PUBLIC_BACKEND_DOMAIN}/api/groups/${groupId}`,
+    {
+      method: 'DELETE',
+      credentials: 'include',
+    }
+  );
+  return response.json();
+};
+
+export const fetchBookRegister = async ({
+  title,
+  author,
+  description,
+  category,
+  groupId,
+}: BookRegisterRequest) => {
+  const response = await fetchWithAuth(
+    `${process.env.NEXT_PUBLIC_BACKEND_DOMAIN}/api/books`,
+    {
+      method: 'POST',
+      body: JSON.stringify({ title, author, description, category, groupId }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+    }
+  );
+  return response.json();
+};
+
+export const fetchBookLent = async (bookId: number) => {
+  const response = await fetchWithAuth(
+    `${process.env.NEXT_PUBLIC_BACKEND_DOMAIN}/api/rents`,
+    {
+      method: 'POST',
+      body: JSON.stringify({ bookId }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+    }
+  );
+  return response.json();
+};
+
+export const fetchMyLents = async (): Promise<MyLentsResponse[]> => {
+  const response = await fetchWithAuth(
+    `${process.env.NEXT_PUBLIC_BACKEND_DOMAIN}/api/rents/my`,
+    {
+      method: 'GET',
+      credentials: 'include',
+    }
+  );
+  return response.json();
 };

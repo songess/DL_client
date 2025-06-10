@@ -1,4 +1,4 @@
-export type GROUPSTATUS = 'NONE' | 'PENDING' | 'ACCEPTED' | 'REJECTED';
+export type GROUPSTATUS = 'NONE' | 'PENDING' | 'APPROVED' | 'REJECTED';
 type GROUPNAME = 'CNU' | 'PARROT' | 'GDGoC' | 'RELEASE';
 type USER = 'ADMIN' | 'USER';
 
@@ -69,4 +69,36 @@ export interface Book {
 export interface BookResponse extends ResponseTemplate {
   // 책 조회
   result: Book[];
+}
+
+export interface GroupListResponse extends ResponseTemplate {
+  result: UserGroup[];
+}
+
+export interface GroupUserPENDINGListResponse extends ResponseTemplate {
+  result: User[];
+}
+
+export interface BookListResponse extends ResponseTemplate {
+  result: {
+    list: Book[];
+  };
+}
+
+export interface BookRegisterRequest {
+  title: string;
+  author: string;
+  description?: string;
+  category: string;
+  groupId: number;
+}
+
+export interface MyLentsResponse {
+  rentId: number;
+  userName: string;
+  bookTitle: string;
+  rentalStartAt: Date;
+  createdAt: Date;
+  returnAt: Date;
+  isOverdue: boolean;
 }
